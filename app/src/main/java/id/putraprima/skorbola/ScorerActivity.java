@@ -1,34 +1,55 @@
 package id.putraprima.skorbola;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ScorerActivity extends AppCompatActivity {
 
-    public static final String SCORER_KEY = "scorer";
-    public static final String EXTRA_REPLY = "com.example.android.twoactivities.extra.REPLY";
-
-    private EditText scorer;
+    private EditText mEditText;
+    private Button mButton;
+    private int request;
+    private String scorerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scorer);
-        scorer = findViewById(R.id.pencetakGol);
+
+        mEditText = findViewById(R.id.editText);
+        mButton = findViewById(R.id.button);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle !=null){
+            request = bundle.getInt("REQUEST_KEY");
+        }
     }
 
-    public void match(View view) {
-        String scorerr = scorer.getText().toString();
-        Intent i = new Intent();
-        i.putExtra(SCORER_KEY, scorerr);
-        setResult(RESULT_OK,i);
-        finish();
+    public void handleBackToMatch(View view) {
+        scorerName = mEditText.getText().toString();
+        if ((scorerName).equals("")){
+            Toast.makeText(this, "Please enter scorer name", Toast.LENGTH_SHORT).show();
+        }else{
+            if (request == 1){
+                scorerName = mEditText.getText().toString();
+                Intent intent = new Intent();
+                intent.putExtra("HOME_SCORER_KEY", scorerName);
+                setResult(1, intent);
+                finish();
+            }else if (request == 2){
+                scorerName = mEditText.getText().toString();
+                Intent intent = new Intent();
+                intent.putExtra("AWAY_SCORER_KEY", scorerName);
+                setResult(1, intent);
+                finish();
+            }
+        }
     }
 }
